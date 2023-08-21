@@ -1,0 +1,33 @@
+name: SSL Expiry Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # Run every day at midnight UTC
+
+jobs:
+  ssl_expiry_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install -g ssl-checker-cli
+
+      - name: Run SSL Expiry Check
+        run: |
+          # Read the list of domains from a file (one domain per line)
+          while IFS= read -r domain; do
+            days_left=$(ssl-checker -d "$domain" -q -f "{{.Days}}")
+            if [ "$days_left" -lt 30 ]; then
+              message="SSL Expiry Alert\n* Domain : $domain\n* Warning : The SSL certificate for $domain will expire in $days_left days."
+              curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" $SLACK_WEBHOOK_URL
+            fi
+          done < domains.txt
