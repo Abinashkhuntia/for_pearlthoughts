@@ -1,35 +1,24 @@
 name: SSL Expiry Check
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Run every day at midnight UTC
+    - cron: '* * * * *'
+  workflow_dispatch:
 
 jobs:
-  ssl_expiry_check:
+  check-ssl-expiry:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Check SSL expiry
+        uses: actions/setup-python@v2
         with:
-          node-version: '16'
-
+          python-version: 3.8
       - name: Install dependencies
-        run: npm install -g ssl-checker-cli
-
-      - name: Run SSL Expiry Check
-        run: |
-          # Read the list of domains from a file (one domain per line)
-          while IFS= read -r domain; do
-            days_left=$(ssl-checker -d "$domain" -q -f "{{.Days}}")
-            if [ "$days_left" -lt 300000 ]; then
-              message="SSL Expiry Alert\n* Domain : $domain\n* Warning : The SSL certificate for $domain will expire in $days_left days."
-              curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" $SLACK_WEBHOOK_URL
-            fi
-          done < domains.txt
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: pip install pyOpenSSL
+      - name: Get domain names
+        run: echo "www.google.com" > domains.txt
+      - name: Check SSL expiry for each domain
+        for: domain in $(cat domains.txt)
+        do
+          run: python check_ssl_expiry.py $domain
+        done
