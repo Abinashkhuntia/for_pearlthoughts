@@ -14,4 +14,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Bash Script
-        run: bash .github/scripts/ssl_expiry_check.sh
+        run: bash ssl_expiry_check.sh
