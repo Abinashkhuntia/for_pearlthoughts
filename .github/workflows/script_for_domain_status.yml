@@ -13,29 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
       - name: Install dependencies
-        run: npm install -g certbot
+        run: npm install -g ssl-checker-cli
 
       - name: Run SSL Expiry Check
         run: |
-          # Get the list of domains from a file
-          domains=$(cat domains.txt)
-
-          # Check the SSL expiry status for each domain
-          for domain in $domains; do
-            cert_info=$(certbot certificates | grep -A 2 "$domain")
-            days_left=$(echo "$cert_info" | grep "Expiry Date:" | awk '{print $3}')
-
-            # Convert the expiry date to days left
-            expiry_date=$(date -d "$days_left" +"%s")
-            current_date=$(date +"%s")
-            days_left=$(( ($expiry_date - $current_date) / 86400 ))
-
-            # Send an alert notification if the SSL certificate is about to expire
-            if [ "$days_left" -lt 1000 ]; then
+          # Read the list of domains from a file (one domain per line)
+          while IFS= read -r domain; do
+            days_left=$(ssl-checker -d "$domain" -q -f "{{.Days}}")
+            if [ "$days_left" -lt 300000 ]; then
               message="SSL Expiry Alert\n* Domain : $domain\n* Warning : The SSL certificate for $domain will expire in $days_left days."
               curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" $SLACK_WEBHOOK_URL
             fi
-          done
+          done < domains.txt
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
