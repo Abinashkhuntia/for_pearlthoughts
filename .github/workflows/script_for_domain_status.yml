@@ -2,7 +2,7 @@ name: SSL Expiry Check
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,5 @@ jobs:
       - name: Get domain names
         run: echo "www.google.com" > domains.txt
       - name: Check SSL expiry for each domain
-        for: domain in $(cat domains.txt)
-        do
+        for domain in $(cat domains.txt):
           run: python check_ssl_expiry.py $domain
-        done
