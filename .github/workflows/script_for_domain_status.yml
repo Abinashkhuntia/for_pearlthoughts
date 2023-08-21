@@ -32,7 +32,7 @@ jobs:
             days_left=$(( ($expiry_date - $current_date) / 86400 ))
 
             # Send an alert notification if the SSL certificate is about to expire
-            if [ "$days_left" -lt 30 ]; then
+            if [ "$days_left" -lt 1000 ]; then
               message="SSL Expiry Alert\n* Domain : $domain\n* Warning : The SSL certificate for $domain will expire in $days_left days."
               curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" $SLACK_WEBHOOK_URL
             fi
