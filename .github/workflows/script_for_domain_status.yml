@@ -25,7 +25,7 @@ jobs:
         run: |
           # Read the list of domains from a file (one domain per line)
           while IFS= read -r domain; do
-            days_left=$(ssl-checker -d "$domain" -q -f "{{.Days}}")
+            days_left=$(ssl-check -d "$domain" -q -f "{{.Days}}")
             if [ "$days_left" -lt 3000 ]; then
               message="SSL Expiry Alert\n* Domain : $domain\n* Warning : The SSL certificate for $domain will expire in $days_left days."
               curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"$message\"}" $SLACK_WEBHOOK_URL
