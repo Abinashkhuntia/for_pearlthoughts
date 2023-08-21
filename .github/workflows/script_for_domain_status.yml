@@ -20,5 +20,6 @@ jobs:
       - name: Check SSL expiry for each domain
         run: |
           while IFS= read -r domain; do
-            python check_ssl_expiry.py "$domain"
+            python ssl_expiry.py "$domain"
           done < domains.txt
+
