@@ -19,7 +19,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install -g ssl-checker-cli@latest --registry https://npm.pkg.github.com
+        run: npm install @github/ssl-checker-cli@latest
 
       - name: Run SSL Expiry Check
         run: |
