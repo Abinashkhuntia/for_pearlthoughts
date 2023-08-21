@@ -2,7 +2,7 @@ name: SSL Expiry Check
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '* * * * *'
   workflow_dispatch:
 
 jobs:
@@ -20,6 +20,5 @@ jobs:
       - name: Check SSL expiry for each domain
         run: |
           while IFS= read -r domain; do
-            python ssl_expiry.py "$domain"
+            python check_ssl_expiry.py "$domain"
           done < domains.txt
-
