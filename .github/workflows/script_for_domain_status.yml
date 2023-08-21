@@ -1,17 +1,1 @@
-name: SSL Expiry Check
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '* * * * *'  # Run every day at midnight UTC
-
-jobs:
-  ssl_expiry_check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run Bash Script
-        run: bash ssl_expiry_check.sh
