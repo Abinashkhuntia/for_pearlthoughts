@@ -1,8 +1,1 @@
-abinash-khunita.me
-example1.com
-example.com
-www.example.com
-www.google.com 
-www.facebook.com 
-www.amazon.com 
-www.netflix.com
+control.akamai.com
