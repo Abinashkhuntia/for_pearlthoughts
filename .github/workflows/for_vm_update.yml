@@ -1,0 +1,14 @@
+name: Update Server
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  update-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update server
+        run: |
+          ssh -i ${{ secrets.my_new_key_pair.pem }} ubuntu@65.0.93.250 "sudo apt update && sudo apt upgrade"
