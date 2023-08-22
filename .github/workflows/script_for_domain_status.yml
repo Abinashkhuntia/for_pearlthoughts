@@ -26,6 +26,6 @@ jobs:
               slack_message="SSL Expiry Alert
               * Domain : $domain
               * Warning : The SSL certificate for $domain will expire in $days_to_expiry days."
-              curl -X POST -H 'Content-Type: application/json' -d "{ \"text\": \"$slack_message\" }" "$SLACK_WEBHOOK_URL"
+              curl -X POST -H 'Content-Type: application/json' -d "{ \"text\": \"$slack_message\" }" $SLACK_WEBHOOK_URL
             fi
           done
