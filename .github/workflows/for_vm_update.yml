@@ -2,7 +2,7 @@ name:  Server Update
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '* * * * *'
 
 jobs:
   do-something-in-server:
