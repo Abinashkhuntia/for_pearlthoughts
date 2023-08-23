@@ -23,4 +23,4 @@ jobs:
         ssh-keyscan -t rsa vm-ip-address >> ~/.ssh/known_hosts
 
     - name: SSH into VM
-      run: ssh -i ~/.ssh/id_rsa ubuntu@13.127.154.254 "echo 'This is something I did in the server' > /tmp/something.txt"
+      run: ssh -i ~/.ssh/id_rsa ubuntu@ec2-13-127-154-254.ap-south-1.compute.amazonaws.com "echo 'This is something I did in the server' > /tmp/something.txt"
