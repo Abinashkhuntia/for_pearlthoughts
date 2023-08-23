@@ -1,14 +1,14 @@
-name: Update Server
+name:  Server Update
 
 on:
   schedule:
-    - cron: '* * * * *'
+    - cron: '0 0 * * *'
 
 jobs:
-  update-server:
+  do-something-in-server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Update server
+      - name: Do something in server
         run: |
-          ssh -i ${{ secrets.MY_NEW_KEY_PAIR }} ubuntu@65.0.93.250 "sudo apt update && sudo apt upgrade"
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@13.127.154.254 "echo 'This is something I did in the server' > /tmp/something.txt"
