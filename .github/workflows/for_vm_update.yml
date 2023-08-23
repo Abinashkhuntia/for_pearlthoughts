@@ -23,5 +23,5 @@ jobs:
         ssh-keyscan -t rsa 13.127.154.254 >> ~/.ssh/known_hosts
 
     - name: SSH into VM
-      run: ssh -i ~/.ssh/id_rsa ubuntu@13.127.154.254 "echo 'This is something I did in the server' > /tmp/something.txt"
+      run: ssh -i ~/.ssh/id_rsa ubuntu@13.127.154.254 "echo 'hello world' > /tmp/Erath.txt"
 
