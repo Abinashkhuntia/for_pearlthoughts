@@ -1,14 +1,26 @@
-name:  Server Update
+name: SSH into VM
 
 on:
-  schedule:
-    - cron: '* * * * *'
+  push:
+    branches:
+      - main
 
 jobs:
-  do-something-in-server:
+  ssh:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Do something in server
-        run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@13.127.154.254 "echo 'This is something I did in the server' > /tmp/something.txt"
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -t rsa vm-ip-address >> ~/.ssh/known_hosts
+
+    - name: SSH into VM
+      run: ssh -i ~/.ssh/id_rsa ubuntu@13.127.154.254 "echo 'This is something I did in the server' > /tmp/something.txt"
