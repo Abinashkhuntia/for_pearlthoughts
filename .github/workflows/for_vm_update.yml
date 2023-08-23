@@ -3,7 +3,7 @@ name: SSH into VM
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   ssh:
